@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="zlib.min.js"></script>
+<script src="PNG.js"></script>
+<script>
+function save(){  
+      
+  // Generate ImageData 
+  // (ImageDataの生成)
+  var src_img = document.getElementById("SrcImage");
+  var dst_canvas = document.getElementById("DstCanvas");
+  var dst_ctx = dst_canvas.getContext("2d");      
+  var imagedata = dst_ctx.getImageData(0,0,dst_canvas.width,dst_canvas.height); 
+ 
+  // Output in PNG format 
+  // (PNG形式で出力する)
+  var PNGWriter = new TPNGWriter(imagedata);
+  PNGWriter.SaveToFile('untitle.png');
+}  
+
+function OpenFile(event) {  
+  var files;
+  var reader = new FileReader();
+  
+  if(event.target.files){
+    files = event.target.files;
+  }else{ 
+    files = event.dataTransfer.files;   
+  }    
+
+  reader.onload = function (event) {
+    
+    src_img.onload = function (){  
+      dst_canvas.width  = src_img.width;
+      dst_canvas.height = src_img.height;        
+      dst_ctx.drawImage(src_img,0,0); 
+    };      
+       
+    src_img.onerror  = function (){
+      alert('This file can not be read.');  
+      run_flg = false;      
+    };
+
+    src_img.src = reader.result;       
+  };
+  
+  if (files[0]){    
+    reader.readAsDataURL(files[0]); 
+    document.getElementById("inputfile").value = '';
+  }
+}       
+</script>
+</head>
+<body>
+<input type="file" id="inputfile" accept="image/jpeg,image/png,image/gif,image/bmp,image/x-icon" onchange="OpenFile(event);">
+<button onclick="save();" style="font-size:24px;">Save</button> 
+<p>[Original image]</p>
+<img id="SrcImage" style="display:none;">
+<canvas id="DstCanvas"></canvas>
+</body>
+</html>
