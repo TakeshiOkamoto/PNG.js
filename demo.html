@@ -5,13 +5,18 @@
 <script src="zlib.min.js"></script>
 <script src="PNG.js"></script>
 <script>
+var src_img,dst_canvas,dst_ctx;
+
+window.onload = function () {  
+  src_img = document.getElementById("SrcImage");
+  dst_canvas = document.getElementById("DstCanvas");
+  dst_ctx = dst_canvas.getContext("2d");        
+}
+
 function save(){  
       
   // Generate ImageData 
-  // (ImageDataの生成)
-  var src_img = document.getElementById("SrcImage");
-  var dst_canvas = document.getElementById("DstCanvas");
-  var dst_ctx = dst_canvas.getContext("2d");      
+  // (ImageDataの生成)    
   var imagedata = dst_ctx.getImageData(0,0,dst_canvas.width,dst_canvas.height); 
  
   // Output in PNG format 
